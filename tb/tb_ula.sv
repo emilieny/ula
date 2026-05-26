@@ -7,18 +7,19 @@ module tb_ula;
     logic [WIDTH-1:0] a;
     logic [WIDTH-1:0] b;
 
-    logic [1:0] op;
+    logic [2:0] op;
 
     logic [WIDTH-1:0] result;
 
     // =========================
     // Opcodes locais do TB
     // =========================
-    typedef enum logic [1:0] {
-        NOP  = 2'b00,
-        ADD  = 2'b01,
-        SUB  = 2'b10,
-        MULT = 2'b11
+    typedef enum logic [2:0] {
+        NOP  = 3'b000,
+        ADD  = 3'b001,
+        SUB  = 3'b010,
+        MULT = 3'b011,
+        SHIFT = 3'b100
     } operation_t;
 
     // =========================
@@ -33,28 +34,44 @@ module tb_ula;
         .result(result)
     );
 
+
+    // Geração do dump FSDB
+    initial begin
+        $fsdbDumpfile("waves.fsdb");
+        $fsdbDumpvars(0, tb_ula);
+    end
+
     initial begin
 
         $display("Inicio da simulacao");
 
-        a = 10;
-        b = 5;
+        for(int i = 0; i < 5; i++) begin
 
-        op = NOP;
-        #10
-        $display("NOP  -> result = %0d", result);
+            a = 10 + i;
+            b = 5 + i;
 
-        op = ADD;
-        #10
-        $display("ADD  -> result = %0d", result);
+            op = NOP;
+            #10
+            $display("NOP  -> result = %0d", result);
 
-        op = SUB;
-        #10
-        $display("SUB  -> result = %0d", result);
+            op = ADD;
+            #10
+            $display("ADD  -> result = %0d", result);
 
-        op = MULT;
-        #10
-        $display("MULT -> result = %0d", result);
+            op = SUB;
+            #10
+            $display("SUB  -> result = %0d", result);
+
+            op = MULT;
+            #10
+            $display("MULT -> result = %0d", result);
+
+            op = SHIFT;
+            #10
+            $display("SHIFT -> result = %0d", result);
+
+
+        end
 
         $finish;
 

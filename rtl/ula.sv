@@ -6,7 +6,7 @@ module ula #(
     input  logic [WIDTH-1:0] a,
     input  logic [WIDTH-1:0] b,
 
-    input  logic [1:0] op,
+    input  logic [2:0] op,
 
     output logic [WIDTH-1:0] result
 );
@@ -14,11 +14,12 @@ module ula #(
     // =========================
     // Enum dos opcodes
     // =========================
-    typedef enum logic [1:0] {
-        NOP  = 2'b00,
-        ADD  = 2'b01,
-        SUB  = 2'b10,
-        MULT = 2'b11
+    typedef enum logic [2:0] {
+        NOP  = 3'b000,
+        ADD  = 3'b001,
+        SUB  = 3'b010,
+        MULT = 3'b011,
+        SHIFT = 3'b100
     } operation_t;
 
     always_comb begin
@@ -29,6 +30,7 @@ module ula #(
             ADD:  result = a + b;
             SUB:  result = a - b;
             MULT: result = a * b;
+            SHIFT: result = a << b;
 
             default: result = '0;
 
